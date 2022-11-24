@@ -2,7 +2,9 @@ package sui
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/0x6368616e67/sui-sdk-go/types"
 	"github.com/ethereum/go-ethereum/rpc"
 )
 
@@ -37,6 +39,16 @@ func (c *Client) Close() {
 func (c *Client) GetTotalTransactionNumber(ctx context.Context) (number uint64, err error) {
 	err = c.c.CallContext(ctx, &number, "sui_getTotalTransactionNumber")
 	if err != nil {
+		err = ErrNumber
+	}
+	return
+}
+
+func (c *Client) GetEvents(ctx context.Context, query types.EventQuery, cursor *types.EventID, limit uint64, descending bool) (event *types.PaginatedEvents, err error) {
+	event = &types.PaginatedEvents{}
+	err = c.c.CallContext(ctx, event, "sui_getEvents", query, cursor, limit, descending)
+	if err != nil {
+		fmt.Printf("err:%s\n", err.Error())
 		err = ErrNumber
 	}
 	return

@@ -16,7 +16,7 @@ a sui sdk  of golang
 - [ ] sui_getObjectsOwnedByAddress
 - [ ] sui_getObjectsOwnedByObject
 - [ ] sui_getRawObject
-- [*] sui_getTotalTransactionNumber
+- [x] sui_getTotalTransactionNumber
 - [ ] sui_getTransaction
 - [ ] sui_getTransactions
 - [ ] sui_getTransactionsInRange
