@@ -93,55 +93,21 @@ func (eq *TimeRangeEventQuery) EventQuery() string {
 	return "TimeRange"
 }
 
-type Recipienter interface {
-	Recipienter() string
+type SharedRecipient struct {
+	Version uint64 `json:"initial_shared_version"`
 }
 
-type AddressOwner struct {
-	AddressOwner string `json:"AddressOwner"`
-}
-
-func (oo *AddressOwner) Recipienter() string {
-	return "AddressOwner"
-}
-
-type ObjectOwner struct {
-	ObjectOwner string `json:"ObjectOwner"`
-}
-
-func (oo *ObjectOwner) Recipienter() string {
-	return "ObjectOwner"
+type Recipient struct {
+	AddressOwner *string          `json:"AddressOwner,omitempty"`
+	ObjectOwner  *string          `json:"ObjectOwner,omitempty"`
+	Shared       *SharedRecipient `json:"Shared,omitempty"`
 }
 
 type Immutable string
 
-func (oo *Immutable) Recipienter() string {
-	return "Immutable"
-}
-
-type Shared struct {
-	Version uint64 `json:"initial_shared_version"`
-}
-
-func (oo *Shared) Recipienter() string {
-	return "Shared"
-}
-
-type RecipientEventQuery struct {
-	Recipient Recipienter `json:"Recipient"`
-}
-
-func (eq *RecipientEventQuery) EventQuery() string {
-	return "Recipient"
-}
-
 type EventID struct {
 	TxSeq    uint64 `json:"txSeq"`
 	EventSeq uint64 `json:"eventSeq"`
-}
-
-type SuiEvent interface {
-	SuiEvent() string
 }
 
 type MoveEvent struct {
@@ -153,24 +119,9 @@ type MoveEvent struct {
 	BCS               string                 `json:"bcs"`
 }
 
-type MoveSuiEvent struct {
-	MoveEvent MoveEvent `json:"moveEvent"`
-}
-
-func (se *MoveSuiEvent) SuiEvent() string {
-	return "MoveSuiEvent"
-}
-
 type PublishEvent struct {
 	Sender    string   `json:"sender"`
 	PackageID ObjectID `json:"packageId"`
-}
-type PublishSuiEvent struct {
-	Publish PublishEvent `json:"publish"`
-}
-
-func (se *PublishSuiEvent) SuiEvent() string {
-	return "PublishSuiEvent"
 }
 
 type BalanceChangeType string
@@ -185,38 +136,22 @@ type CoinBalanceChangeEvent struct {
 	PackageID         ObjectID          `json:"packageId"`
 	TransactionModule string            `json:"transactionModule"`
 	Sender            string            `json:"sender"`
-	Owner             Recipienter       `json:"owner"`
+	Owner             Recipient         `json:"owner"`
 	ChangeType        BalanceChangeType `json:"changeType"`
 	CoinType          string            `json:"coinType"`
 	CoinObjectID      ObjectID          `json:"coinObjectId"`
 	Version           uint64            `json:"version"`
-	Amount            uint64            `json:"amount"`
-}
-
-type CoinBalanceChangeSuiEvent struct {
-	CoinBalanceChange CoinBalanceChangeEvent `json:"coinBalanceChange"`
-}
-
-func (se *CoinBalanceChangeSuiEvent) SuiEvent() string {
-	return "CoinBalanceChangeSuiEvent"
+	Amount            int64             `json:"amount"`
 }
 
 type TransferObjectEvent struct {
-	PackageID         ObjectID    `json:"packageId"`
-	TransactionModule string      `json:"transactionModule"`
-	Sender            string      `json:"sender"`
-	Recipient         Recipienter `json:"recipient"`
-	ObjectType        string      `json:"objectType"`
-	ObjectID          ObjectID    `json:"objectId"`
-	Version           uint64      `json:"version"`
-}
-
-type TransferObjectSuiEvent struct {
-	TransferObject TransferObjectEvent `json:"transferObject"`
-}
-
-func (se *TransferObjectSuiEvent) SuiEvent() string {
-	return "TransferObjectSuiEvent"
+	PackageID         ObjectID  `json:"packageId"`
+	TransactionModule string    `json:"transactionModule"`
+	Sender            string    `json:"sender"`
+	Recipient         Recipient `json:"recipient"`
+	ObjectType        string    `json:"objectType"`
+	ObjectID          ObjectID  `json:"objectId"`
+	Version           uint64    `json:"version"`
 }
 
 type MutateObjectEvent struct {
@@ -228,14 +163,6 @@ type MutateObjectEvent struct {
 	Version           uint64   `json:"version"`
 }
 
-type MutateObjectSuiEvent struct {
-	MutateObject MutateObjectEvent `json:"mutateObject"`
-}
-
-func (se *MutateObjectSuiEvent) SuiEvent() string {
-	return "MutateObjectSuiEvent"
-}
-
 type DeleteObjectEvent struct {
 	PackageID         ObjectID `json:"packageId"`
 	TransactionModule string   `json:"transactionModule"`
@@ -243,45 +170,27 @@ type DeleteObjectEvent struct {
 	ObjectID          ObjectID `json:"objectId"`
 	Version           uint64   `json:"version"`
 }
-type DeleteObjectSuiEvent struct {
-	DeleteObject DeleteObjectEvent `json:"deleteObject"`
-}
-
-func (se *DeleteObjectSuiEvent) SuiEvent() string {
-	return "DeleteObjectSuiEvent"
-}
 
 type NewObjectEvent struct {
-	PackageID         ObjectID    `json:"packageId"`
-	TransactionModule string      `json:"transactionModule"`
-	Sender            string      `json:"sender"`
-	Recipient         Recipienter `json:"recipient"`
-	ObjectType        string      `json:"objectType"`
-	ObjectID          ObjectID    `json:"objectId"`
-	Version           uint64      `json:"version"`
-}
-type NewObjectSuiEvent struct {
-	NewObject NewObjectEvent `json:"newObject"`
+	PackageID         ObjectID  `json:"packageId"`
+	TransactionModule string    `json:"transactionModule"`
+	Sender            string    `json:"sender"`
+	Recipient         Recipient `json:"recipient"`
+	ObjectType        string    `json:"objectType"`
+	ObjectID          ObjectID  `json:"objectId"`
+	Version           uint64    `json:"version"`
 }
 
-func (se *NewObjectSuiEvent) SuiEvent() string {
-	return "NewObjectSuiEvent"
-}
-
-type EpochChangeSuiEvent struct {
-	EpochChange big.Int `json:"epochChange"`
-}
-
-func (se *EpochChangeSuiEvent) SuiEvent() string {
-	return "EpochChangeSuiEvent"
-}
-
-type CheckpointSuiEvent struct {
-	Checkpoint big.Int `json:"checkpoint"`
-}
-
-func (se *CheckpointSuiEvent) SuiEvent() string {
-	return "CheckpointSuiEvent"
+type SuiEvent struct {
+	MoveEvent              *MoveEvent              `json:"moveEvent,omitempty"`
+	Publish                *PublishEvent           `json:"publish,omitempty"`
+	CoinBalanceChangeEvent *CoinBalanceChangeEvent `json:"coinBalanceChange,omitempty"`
+	TransferObject         *TransferObjectEvent    `json:"transferObject,omitempty"`
+	MutateObject           *MutateObjectEvent      `json:"mutateObject,omitempty"`
+	DeleteObject           *DeleteObjectEvent      `json:"deleteObject,omitempty"`
+	NewObject              *NewObjectEvent         `json:"newObject,omitempty"`
+	EpochChange            *big.Int                `json:"epochChange,omitempty"`
+	Checkpoint             *big.Int                `json:"checkpoint,omitempty"`
 }
 
 type SuiEventEnvelope struct {

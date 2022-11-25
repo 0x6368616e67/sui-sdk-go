@@ -26,7 +26,7 @@ func TestGetEvents(t *testing.T) {
 	events, err := cli.GetEvents(context.Background(), query, nil, 1, false)
 	assert.Equal(t, err, nil)
 	assert.Equal(t, len(events.Data), 1)
-	fmt.Printf("events:%+v \n", events)
-	fmt.Printf("data:%+v \n", events.Data[0])
+	//fmt.Printf("events:%+v \n", events)
+	fmt.Printf("data:%+v \n", events.Data[0].Event.CoinBalanceChangeEvent)
 
 }
