@@ -2,6 +2,7 @@ package sui
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/0x6368616e67/sui-sdk-go/types"
@@ -24,5 +25,8 @@ func TestGetEvents(t *testing.T) {
 		Transaction: "8vaJIJ49U/Ngohpp0ARqGHhfoBOaA/FC6wGJHsjdiLI="}
 	events, err := cli.GetEvents(context.Background(), query, nil, 1, false)
 	assert.Equal(t, err, nil)
-	t.Log(events)
+	assert.Equal(t, len(events.Data), 1)
+	fmt.Printf("events:%+v \n", events)
+	fmt.Printf("data:%+v \n", events.Data[0])
+
 }
