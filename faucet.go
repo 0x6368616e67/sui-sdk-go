@@ -30,6 +30,9 @@ func Faucet(addr string) (err error) {
 		faucetURL = testNetFaucetURL
 	}
 	rsp, err := http.Post(faucetURL, "application/json", bytes.NewReader(body))
+	if err != nil {
+		return
+	}
 	rspBody, _ := ioutil.ReadAll(rsp.Body)
 	fmt.Printf("response:%s\n", rspBody)
 	return err
