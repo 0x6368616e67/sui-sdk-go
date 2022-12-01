@@ -30,3 +30,34 @@ func TestGetEvents(t *testing.T) {
 	fmt.Printf("data:%+v \n", events.Data[0].Event.CoinBalanceChangeEvent)
 
 }
+
+func TestGetObjectsOwnedByAddress(t *testing.T) {
+	cli, err := Dial(Testnet)
+	assert.Equal(t, err, nil)
+	address := types.HexToAddress("")
+	objects, err := cli.GetObjectsOwnedByAddress(context.Background(), address)
+	assert.Equal(t, err, nil)
+	fmt.Printf("objects:%+v \n", objects)
+	fmt.Printf("objects count:%d \n", len(objects))
+}
+
+func TestPayAllSui(t *testing.T) {
+	cli, err := Dial(Testnet)
+	assert.Equal(t, err, nil)
+
+	address := types.HexToAddress("")
+	objects, err := cli.GetObjectsOwnedByAddress(context.Background(), address)
+	assert.Equal(t, err, nil)
+	objs := []types.ObjectID{}
+	for _, o := range objects {
+		objs = append(objs, o.ObjectID)
+	}
+	signer := types.HexToAddress("")
+	txBytes, err := cli.PayAllSui(context.Background(), signer, objs, signer, 2000)
+	assert.Equal(t, err, nil)
+	fmt.Printf("txBytes:%+v \n", txBytes)
+}
+
+func TestExecuteTransaction(t *testing.T) {
+
+}

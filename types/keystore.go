@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/subtle"
+	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -163,6 +164,10 @@ func (pubKey PubKey) Address() Address {
 // Bytes returns the PubKey byte format.
 func (pubKey PubKey) Bytes() []byte {
 	return []byte(pubKey)
+}
+
+func (pubKey PubKey) Base64() string {
+	return base64.StdEncoding.EncodeToString(pubKey.Bytes())
 }
 
 func (pubKey PubKey) VerifySignature(msg []byte, sig []byte) bool {

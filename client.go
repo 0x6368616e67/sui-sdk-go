@@ -53,3 +53,33 @@ func (c *Client) GetEvents(ctx context.Context, query types.EventQuery, cursor *
 	}
 	return
 }
+
+func (c *Client) GetObjectsOwnedByAddress(ctx context.Context, address types.Address) (object []*types.SuiObject, err error) {
+	object = make([]*types.SuiObject, 0)
+	err = c.c.CallContext(ctx, &object, "sui_getObjectsOwnedByAddress", address.String())
+	if err != nil {
+		fmt.Printf("err:%s\n", err.Error())
+		err = ErrNumber
+	}
+	return
+}
+
+func (c *Client) PayAllSui(ctx context.Context, signer types.Address, coins []types.ObjectID, recipient types.Address, gasBudget uint64) (txBytes *types.TransactionBytes, err error) {
+	txBytes = &types.TransactionBytes{}
+	err = c.c.CallContext(ctx, txBytes, "sui_payAllSui", signer.String(), coins, recipient.String(), gasBudget)
+	if err != nil {
+		fmt.Printf("err:%s\n", err.Error())
+		err = ErrNumber
+	}
+	return
+}
+
+func (c *Client) ExecuteTransaction(ctx context.Context, txBytes string, signatureScheme SignatureScheme, signature string, pubkey types.PubKey, requestType ExecuteTransactionRequestType) (response *types.SuiExecuteTransactionResponse, err error) {
+	response = &types.SuiExecuteTransactionResponse{}
+	err = c.c.CallContext(ctx, response, "sui_executeTransaction", txBytes, signatureScheme, signature, pubkey.Base64(), requestType)
+	if err != nil {
+		fmt.Printf("err:%s\n", err.Error())
+		err = ErrNumber
+	}
+	return
+}
