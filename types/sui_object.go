@@ -14,3 +14,12 @@ type SuiObject struct {
 	Type  string    `json:"type"`
 	Owner Recipient `json:"owner"`
 }
+
+type SuiCoinMetadata struct {
+	Decimals    uint8    `json:"decimals"`
+	Description string   `json:"description"`
+	IconUrl     string   `json:"iconUrl,omitempty"`
+	ID          ObjectID `json:"id,omitempty"`
+	Name        string   `json:"name"`
+	Symbol      string   `json:"symbol"`
+}

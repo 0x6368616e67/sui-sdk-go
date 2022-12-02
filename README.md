@@ -2,12 +2,15 @@
 a sui sdk  of golang
 
 ## Support RPC Status
+
 - [ ] sui_batchTransaction
 - [ ] sui_dryRunTransaction
 - [ ] sui_executeTransaction
-- [ ] sui_getCommitteeInfo
+- [ ] sui_executeTransactionSerializedSig
+- [x] sui_getCoinMetadata
+- [x] sui_getCommitteeInfo
 - [ ] sui_getEvents
-- [ ] sui_getMoveFunctionArgTypes
+- [x] sui_getMoveFunctionArgTypes
 - [ ] sui_getNormalizedMoveFunction
 - [ ] sui_getNormalizedMoveModule
 - [ ] sui_getNormalizedMoveModulesByPackage
@@ -18,6 +21,7 @@ a sui sdk  of golang
 - [ ] sui_getRawObject
 - [x] sui_getTotalTransactionNumber
 - [ ] sui_getTransaction
+- [ ] sui_getTransactionAuthSigners
 - [ ] sui_getTransactions
 - [ ] sui_getTransactionsInRange
 - [ ] sui_mergeCoins

@@ -36,14 +36,6 @@ func (c *Client) Close() {
 	c.c.Close()
 }
 
-func (c *Client) GetTotalTransactionNumber(ctx context.Context) (number uint64, err error) {
-	err = c.c.CallContext(ctx, &number, "sui_getTotalTransactionNumber")
-	if err != nil {
-		err = ErrNumber
-	}
-	return
-}
-
 func (c *Client) GetEvents(ctx context.Context, query types.EventQuery, cursor *types.EventID, limit uint64, descending bool) (event *types.PaginatedEvents, err error) {
 	event = &types.PaginatedEvents{}
 	err = c.c.CallContext(ctx, event, "sui_getEvents", query, cursor, limit, descending)
@@ -80,6 +72,40 @@ func (c *Client) ExecuteTransaction(ctx context.Context, txBytes string, signatu
 	if err != nil {
 		fmt.Printf("err:%s\n", err.Error())
 		err = ErrNumber
+	}
+	return
+}
+
+///
+/// here
+///
+
+// GetCoinMetadata return metadata(e.g., symbol, decimals) for a coin
+func (c *Client) GetCoinMetadata(ctx context.Context, coinType string) (metadata types.SuiCoinMetadata, err error) {
+	err = c.c.CallContext(ctx, &metadata, "sui_getCoinMetadata", coinType)
+	return
+}
+
+// GetCommitteeInfo return the committee information for the asked epoch
+func (c *Client) GetCommitteeInfo(ctx context.Context, epoch *uint64) (info types.CommitteeInfo, err error) {
+	err = c.c.CallContext(ctx, &info, "sui_getCommitteeInfo", epoch)
+	return
+}
+
+// GetTotalTransactionNumber return the total number of transactions known to the server.
+func (c *Client) GetTotalTransactionNumber(ctx context.Context) (number uint64, err error) {
+	err = c.c.CallContext(ctx, &number, "sui_getTotalTransactionNumber")
+	if err != nil {
+		err = ErrNumber
+	}
+	return
+}
+
+// GetMoveFunctionArgTypes return the argument types of a Move function, based on normalized Type.
+func (c *Client) GetMoveFunctionArgTypes(ctx context.Context, packagee types.ObjectID, module string, function string) (argTypes types.MoveFunctionArgTypes, err error) {
+	err = c.c.CallContext(ctx, &argTypes, "sui_getMoveFunctionArgTypes", packagee, module, function)
+	if err != nil {
+		fmt.Printf("err:%s", err.Error())
 	}
 	return
 }
