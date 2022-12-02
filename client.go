@@ -92,7 +92,7 @@ func (c *Client) GetCommitteeInfo(ctx context.Context, epoch *uint64) (info type
 	return
 }
 
-// GetTotalTransactionNumber return the total number of transactions known to the server.
+// GetTotalTransactionNumber return the total number of transactions known to the server
 func (c *Client) GetTotalTransactionNumber(ctx context.Context) (number uint64, err error) {
 	err = c.c.CallContext(ctx, &number, "sui_getTotalTransactionNumber")
 	if err != nil {
@@ -101,9 +101,15 @@ func (c *Client) GetTotalTransactionNumber(ctx context.Context) (number uint64, 
 	return
 }
 
-// GetMoveFunctionArgTypes return the argument types of a Move function, based on normalized Type.
+// GetMoveFunctionArgTypes return the argument types of a Move function, based on normalized Type
 func (c *Client) GetMoveFunctionArgTypes(ctx context.Context, packagee types.ObjectID, module string, function string) (argTypes types.MoveFunctionArgTypes, err error) {
 	err = c.c.CallContext(ctx, &argTypes, "sui_getMoveFunctionArgTypes", packagee, module, function)
+	return
+}
+
+// GetNormalizedMoveFunction return a structured representation of Move function
+func (c *Client) GetNormalizedMoveFunction(ctx context.Context, packagee types.ObjectID, module string, function string) (argTypes types.SuiMoveNormalizedFunction, err error) {
+	err = c.c.CallContext(ctx, &argTypes, "sui_getNormalizedMoveFunction", packagee, module, function)
 	if err != nil {
 		fmt.Printf("err:%s", err.Error())
 	}

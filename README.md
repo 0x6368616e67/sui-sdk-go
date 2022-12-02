@@ -11,7 +11,7 @@ a sui sdk  of golang
 - [x] sui_getCommitteeInfo
 - [ ] sui_getEvents
 - [x] sui_getMoveFunctionArgTypes
-- [ ] sui_getNormalizedMoveFunction
+- [x] sui_getNormalizedMoveFunction
 - [ ] sui_getNormalizedMoveModule
 - [ ] sui_getNormalizedMoveModulesByPackage
 - [ ] sui_getNormalizedMoveStruct

@@ -80,3 +80,16 @@ func TestGetMoveFunctionArgTypes(t *testing.T) {
 	assert.Equal(t, err, nil)
 	fmt.Printf("ats:%+v \n", ats)
 }
+
+func TestGetNormalizedMoveFunction(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	funcs, err := cli.GetNormalizedMoveFunction(context.Background(), types.ObjectID("0x2"), "sui", "transfer")
+	//funcs, err := cli.GetNormalizedMoveFunction(context.Background(), types.ObjectID("0x0000000000000000000000000000000000000002"), "devnet_nft", "mint")
+	assert.Equal(t, err, nil)
+	fmt.Printf("funcs:%+v \n", funcs)
+	for _, p := range funcs.Parameters {
+
+		fmt.Printf("param:%+v \n", p)
+	}
+}
