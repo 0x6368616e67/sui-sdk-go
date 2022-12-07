@@ -108,8 +108,27 @@ func (c *Client) GetMoveFunctionArgTypes(ctx context.Context, packagee types.Obj
 }
 
 // GetNormalizedMoveFunction return a structured representation of Move function
-func (c *Client) GetNormalizedMoveFunction(ctx context.Context, packagee types.ObjectID, module string, function string) (argTypes types.SuiMoveNormalizedFunction, err error) {
-	err = c.c.CallContext(ctx, &argTypes, "sui_getNormalizedMoveFunction", packagee, module, function)
+func (c *Client) GetNormalizedMoveFunction(ctx context.Context, packagee types.ObjectID, module string, function string) (functionInfo types.SuiMoveNormalizedFunction, err error) {
+	err = c.c.CallContext(ctx, &functionInfo, "sui_getNormalizedMoveFunction", packagee, module, function)
+	if err != nil {
+		fmt.Printf("err:%s", err.Error())
+	}
+	return
+}
+
+// GetGormalizedMoveModule return a structured representation of Move module
+func (c *Client) GetGormalizedMoveModule(ctx context.Context, packagee types.ObjectID, module string) (moduleInfo types.SuiMoveNormalizedModule, err error) {
+	err = c.c.CallContext(ctx, &moduleInfo, "sui_getNormalizedMoveModule", packagee, module)
+	if err != nil {
+		fmt.Printf("err:%s", err.Error())
+	}
+	return
+}
+
+// GetNormalizedMoveModulesByPackage return structured representations of all modules in the given package
+func (c *Client) GetNormalizedMoveModulesByPackage(ctx context.Context, packagee types.ObjectID) (modules map[string]*types.SuiMoveNormalizedModule, err error) {
+	modules = make(map[string]*types.SuiMoveNormalizedModule)
+	err = c.c.CallContext(ctx, &modules, "sui_getNormalizedMoveModulesByPackage", packagee)
 	if err != nil {
 		fmt.Printf("err:%s", err.Error())
 	}

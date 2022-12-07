@@ -51,7 +51,9 @@ func (ats *MoveFunctionArgTypes) UnmarshalJSON(b []byte) (err error) {
 	return
 }
 
-type SuiMoveAbilitySet []string
+type SuiMoveAbilitySet struct {
+	Abilities []string `json:"abilities"`
+}
 
 type SuiMoveNormalizedTyper interface {
 	SuiMoveNormalizedTyper()
@@ -164,7 +166,37 @@ func (smnt *SuiMoveNormalizedType) UnmarshalJSON(b []byte) (err error) {
 type SuiMoveNormalizedFunction struct {
 	Visibility     string                  `json:"visibility"`
 	IsEntry        bool                    `json:"is_entry"`
-	TypeParameters SuiMoveAbilitySet       `json:"type_parameters"`
+	TypeParameters []SuiMoveAbilitySet     `json:"type_parameters"`
 	Parameters     []SuiMoveNormalizedType `json:"parameters"`
 	Return         []SuiMoveNormalizedType `json:"return_"`
+}
+
+type SuiMoveModuleID struct {
+	Address string `json:"address"`
+	Name    string `json:"name"`
+}
+
+type SuiMoveStructTypeParameter struct {
+	Constraints SuiMoveAbilitySet `json:"constraints"`
+	IsPhantom   bool              `json:"is_phantom"`
+}
+
+type SuiMoveNormalizedField struct {
+	Name string                `json:"name"`
+	Type SuiMoveNormalizedType `json:"type_"`
+}
+
+type SuiMoveNormalizedStruct struct {
+	Abilities      SuiMoveAbilitySet            `json:"abilities"`
+	TypeParameters []SuiMoveStructTypeParameter `json:"type_parameters"`
+	Fields         []SuiMoveNormalizedField     `json:"fields"`
+}
+
+type SuiMoveNormalizedModule struct {
+	FileFormatVersion int64                                `json:"file_format_version"`
+	Address           string                               `json:"address"`
+	Name              string                               `json:"name"`
+	Friends           []SuiMoveModuleID                    `json:"friends"`
+	Structs           map[string]SuiMoveNormalizedStruct   `json:"structs"`
+	ExposedFunctions  map[string]SuiMoveNormalizedFunction `json:"exposed_functions"`
 }

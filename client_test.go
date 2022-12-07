@@ -93,3 +93,25 @@ func TestGetNormalizedMoveFunction(t *testing.T) {
 		fmt.Printf("param:%+v \n", p)
 	}
 }
+
+func TestGetGormalizedMoveModule(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	info, err := cli.GetGormalizedMoveModule(context.Background(), types.ObjectID("0x0000000000000000000000000000000000000002"), "devnet_nft")
+	assert.Equal(t, err, nil)
+	fmt.Printf("info:%+v \n", info)
+	for _, s := range info.Structs {
+		fmt.Printf("struct:%+v \n", s)
+	}
+}
+
+func TestGetNormalizedMoveModulesByPackage(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	modules, err := cli.GetNormalizedMoveModulesByPackage(context.Background(), types.ObjectID("0x2"))
+	assert.Equal(t, err, nil)
+	fmt.Printf("modules:%+v \n", modules)
+	for k, m := range modules {
+		fmt.Printf("%s:%+v \n", k, m)
+	}
+}
