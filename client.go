@@ -46,8 +46,8 @@ func (c *Client) GetEvents(ctx context.Context, query types.EventQuery, cursor *
 	return
 }
 
-func (c *Client) GetObjectsOwnedByAddress(ctx context.Context, address types.Address) (object []*types.SuiObject, err error) {
-	object = make([]*types.SuiObject, 0)
+func (c *Client) GetObjectsOwnedByAddress(ctx context.Context, address types.Address) (object []*types.SuiObjectInfo, err error) {
+	object = make([]*types.SuiObjectInfo, 0)
 	err = c.c.CallContext(ctx, &object, "sui_getObjectsOwnedByAddress", address.String())
 	if err != nil {
 		fmt.Printf("err:%s\n", err.Error())
@@ -110,18 +110,12 @@ func (c *Client) GetMoveFunctionArgTypes(ctx context.Context, packagee types.Obj
 // GetNormalizedMoveFunction return a structured representation of Move function
 func (c *Client) GetNormalizedMoveFunction(ctx context.Context, packagee types.ObjectID, module string, function string) (functionInfo types.SuiMoveNormalizedFunction, err error) {
 	err = c.c.CallContext(ctx, &functionInfo, "sui_getNormalizedMoveFunction", packagee, module, function)
-	if err != nil {
-		fmt.Printf("err:%s", err.Error())
-	}
 	return
 }
 
 // GetGormalizedMoveModule return a structured representation of Move module
 func (c *Client) GetGormalizedMoveModule(ctx context.Context, packagee types.ObjectID, module string) (moduleInfo types.SuiMoveNormalizedModule, err error) {
 	err = c.c.CallContext(ctx, &moduleInfo, "sui_getNormalizedMoveModule", packagee, module)
-	if err != nil {
-		fmt.Printf("err:%s", err.Error())
-	}
 	return
 }
 
@@ -129,6 +123,18 @@ func (c *Client) GetGormalizedMoveModule(ctx context.Context, packagee types.Obj
 func (c *Client) GetNormalizedMoveModulesByPackage(ctx context.Context, packagee types.ObjectID) (modules map[string]*types.SuiMoveNormalizedModule, err error) {
 	modules = make(map[string]*types.SuiMoveNormalizedModule)
 	err = c.c.CallContext(ctx, &modules, "sui_getNormalizedMoveModulesByPackage", packagee)
+	return
+}
+
+// GetNormalizedMoveStruct return a structured representation of Move struct
+func (c *Client) GetNormalizedMoveStruct(ctx context.Context, packagee types.ObjectID, module string, structt string) (structInfo types.SuiMoveNormalizedStruct, err error) {
+	err = c.c.CallContext(ctx, &structInfo, "sui_getNormalizedMoveStruct", packagee, module, structt)
+	return
+}
+
+// GetObject the object information for a specified object
+func (c *Client) GetObject(ctx context.Context, objectID types.ObjectID) (objectData types.SuiObjectData, err error) {
+	err = c.c.CallContext(ctx, &objectData, "sui_getObject", objectID)
 	if err != nil {
 		fmt.Printf("err:%s", err.Error())
 	}

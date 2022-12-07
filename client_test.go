@@ -115,3 +115,19 @@ func TestGetNormalizedMoveModulesByPackage(t *testing.T) {
 		fmt.Printf("%s:%+v \n", k, m)
 	}
 }
+
+func TestGetNormalizedMoveStruct(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	info, err := cli.GetNormalizedMoveStruct(context.Background(), types.ObjectID("0x2"), "bag", "Bag")
+	assert.Equal(t, err, nil)
+	fmt.Printf("info:%+v \n", info)
+}
+
+func TestGetObject(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	obj, err := cli.GetObject(context.Background(), types.ObjectID("0x21ecd6dfb5d1d69bbabbad111755817582596941"))
+	assert.Equal(t, err, nil)
+	fmt.Printf("obj:%+v \n", obj)
+}

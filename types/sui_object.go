@@ -9,7 +9,7 @@ type SuiObjectRef struct {
 	Version uint64 `json:"version"`
 }
 
-type SuiObject struct {
+type SuiObjectInfo struct {
 	SuiObjectRef
 	Type  string    `json:"type"`
 	Owner Recipient `json:"owner"`
@@ -22,4 +22,46 @@ type SuiCoinMetadata struct {
 	ID          ObjectID `json:"id,omitempty"`
 	Name        string   `json:"name"`
 	Symbol      string   `json:"symbol"`
+}
+
+type SuiObjectStatus string
+
+const (
+	SuiObjectStatusExists    = SuiObjectStatus("Exists")
+	SuiObjectStatusNotExists = SuiObjectStatus("NotExists")
+	SuiObjectStatusDeleted   = SuiObjectStatus("Deleted")
+)
+
+type SuiObjectType string
+
+const (
+	SuiObjectTypeObject  = SuiObjectType("moveObject")
+	SuiObjectTypePackage = SuiObjectType("package")
+)
+
+type SuiObjectDetailer interface {
+	SuiObjectDetailer()
+}
+
+type SuiData struct {
+}
+
+type ObjectOwner struct {
+}
+
+type SuiObejct struct {
+	Data                SuiData           `josn:"data"`
+	Owner               ObjectOwner       `json:"owner"`
+	PreviousTransaction TransactionDigest `json:"previousTransaction"`
+	StorageRebate       int64             `josn:"storageRebate"`
+	Reference           SuiObjectRef      `json:"reference"`
+}
+
+func (so *SuiObejct) SuiObjectDetailer() {
+
+}
+
+type SuiObjectData struct {
+	Status  SuiObjectStatus   `json:"status"`
+	Details SuiObjectDetailer `json:"details"`
 }
