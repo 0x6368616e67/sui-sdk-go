@@ -46,16 +46,6 @@ func (c *Client) GetEvents(ctx context.Context, query types.EventQuery, cursor *
 	return
 }
 
-func (c *Client) GetObjectsOwnedByAddress(ctx context.Context, address types.Address) (object []*types.SuiObjectInfo, err error) {
-	object = make([]*types.SuiObjectInfo, 0)
-	err = c.c.CallContext(ctx, &object, "sui_getObjectsOwnedByAddress", address.String())
-	if err != nil {
-		fmt.Printf("err:%s\n", err.Error())
-		err = ErrNumber
-	}
-	return
-}
-
 func (c *Client) PayAllSui(ctx context.Context, signer types.Address, coins []types.ObjectID, recipient types.Address, gasBudget uint64) (txBytes *types.TransactionBytes, err error) {
 	txBytes = &types.TransactionBytes{}
 	err = c.c.CallContext(ctx, txBytes, "sui_payAllSui", signer.String(), coins, recipient.String(), gasBudget)
@@ -135,8 +125,29 @@ func (c *Client) GetNormalizedMoveStruct(ctx context.Context, packagee types.Obj
 // GetObject the object information for a specified object
 func (c *Client) GetObject(ctx context.Context, objectID types.ObjectID) (objectData types.SuiObjectData, err error) {
 	err = c.c.CallContext(ctx, &objectData, "sui_getObject", objectID)
+	return
+}
+
+// GetObjectsOwnedByAddress return the list of objects owned by an address
+func (c *Client) GetObjectsOwnedByAddress(ctx context.Context, address types.Address) (object []*types.SuiObjectInfo, err error) {
+	object = make([]*types.SuiObjectInfo, 0)
+	err = c.c.CallContext(ctx, &object, "sui_getObjectsOwnedByAddress", address.String())
+	return
+}
+
+// GetObjectsOwnedByObject return  the list of objects owned by an object
+func (c *Client) GetObjectsOwnedByObject(ctx context.Context, objectID types.ObjectID) (object []*types.SuiObjectInfo, err error) {
+	object = make([]*types.SuiObjectInfo, 0)
+	err = c.c.CallContext(ctx, &object, "sui_getObjectsOwnedByObject", objectID)
+	return
+}
+
+// GetRawObject return the raw BCS serialized move object bytes for a specified object
+func (c *Client) GetRawObject(ctx context.Context, objectID types.ObjectID) (object *types.SuiObjectData, err error) {
+	err = c.c.CallContext(ctx, &object, "sui_getRawObject", objectID)
 	if err != nil {
-		fmt.Printf("err:%s", err.Error())
+		fmt.Printf("err:%s\n", err.Error())
+		err = ErrNumber
 	}
 	return
 }

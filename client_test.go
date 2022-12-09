@@ -21,15 +21,15 @@ import (
 // 	fmt.Printf("data:%+v \n", events.Data[0].Event.CoinBalanceChangeEvent)
 // }
 
-// func TestGetObjectsOwnedByAddress(t *testing.T) {
-// 	cli, err := Dial(Testnet)
-// 	assert.Equal(t, err, nil)
-// 	address := types.HexToAddress("")
-// 	objects, err := cli.GetObjectsOwnedByAddress(context.Background(), address)
-// 	assert.Equal(t, err, nil)
-// 	fmt.Printf("objects:%+v \n", objects)
-// 	fmt.Printf("objects count:%d \n", len(objects))
-// }
+func TestGetObjectsOwnedByAddress(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	address := types.HexToAddress("0xc4173a804406a365e69dfb297d4eaaf002546ebd")
+	objects, err := cli.GetObjectsOwnedByAddress(context.Background(), address)
+	assert.Equal(t, err, nil)
+	fmt.Printf("objects:%+v \n", objects)
+	fmt.Printf("objects count:%d \n", len(objects))
+}
 
 // func TestPayAllSui(t *testing.T) {
 // 	cli, err := Dial(Testnet)
@@ -127,7 +127,24 @@ func TestGetNormalizedMoveStruct(t *testing.T) {
 func TestGetObject(t *testing.T) {
 	cli, err := Dial(Devnet)
 	assert.Equal(t, err, nil)
-	obj, err := cli.GetObject(context.Background(), types.ObjectID("0x21ecd6dfb5d1d69bbabbad111755817582596941"))
+	obj, err := cli.GetObject(context.Background(), types.ObjectID("0x35ec8a32a1d6ca884ba8ffb6dbcfda222533661e"))
+	assert.Equal(t, err, nil)
+	fmt.Printf("obj:%+v \n", obj)
+}
+
+func TestGetObjectsOwnedByObject(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	objects, err := cli.GetObjectsOwnedByObject(context.Background(), "0x21dc8124f8c6a79871957860d88adf16b5813713")
+	assert.Equal(t, err, nil)
+	fmt.Printf("objects:%+v \n", objects)
+	fmt.Printf("objects count:%d \n", len(objects))
+}
+
+func TestGetRawObject(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	obj, err := cli.GetRawObject(context.Background(), types.ObjectID("0x35ec8a32a1d6ca884ba8ffb6dbcfda222533661e"))
 	assert.Equal(t, err, nil)
 	fmt.Printf("obj:%+v \n", obj)
 }
