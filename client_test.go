@@ -148,3 +148,19 @@ func TestGetRawObject(t *testing.T) {
 	assert.Equal(t, err, nil)
 	fmt.Printf("obj:%+v \n", obj)
 }
+
+func TestGetTransaction(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	tx, err := cli.GetTransaction(context.Background(), types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"))
+	assert.Equal(t, err, nil)
+	fmt.Printf("tx:%+v \n", tx)
+}
+
+func TestGetTransactionAuthSigners(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	s, err := cli.GetTransactionAuthSigners(context.Background(), types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"))
+	assert.Equal(t, err, nil)
+	fmt.Printf("signers:%+v \n", s)
+}

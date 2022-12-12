@@ -14,14 +14,14 @@ a sui sdk  of golang
 - [x] sui_getNormalizedMoveFunction
 - [x] sui_getNormalizedMoveModule
 - [x] sui_getNormalizedMoveModulesByPackage
-- [ ] sui_getNormalizedMoveStruct
-- [ ] sui_getObject
-- [ ] sui_getObjectsOwnedByAddress
-- [ ] sui_getObjectsOwnedByObject
-- [ ] sui_getRawObject
+- [x] sui_getNormalizedMoveStruct
+- [x] sui_getObject
+- [x] sui_getObjectsOwnedByAddress
+- [x] sui_getObjectsOwnedByObject
+- [x] sui_getRawObject
 - [x] sui_getTotalTransactionNumber
-- [ ] sui_getTransaction
-- [ ] sui_getTransactionAuthSigners
+- [x] sui_getTransaction
+- [x] sui_getTransactionAuthSigners
 - [ ] sui_getTransactions
 - [ ] sui_getTransactionsInRange
 - [ ] sui_mergeCoins

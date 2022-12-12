@@ -200,3 +200,17 @@ type SuiMoveNormalizedModule struct {
 	Structs           map[string]SuiMoveNormalizedStruct   `json:"structs"`
 	ExposedFunctions  map[string]SuiMoveNormalizedFunction `json:"exposed_functions"`
 }
+
+type MovePackageContent map[string]string
+
+type SuiMovePackage struct {
+	Disassembled MovePackageContent `json:"disassembled"`
+}
+
+type MoveCall struct {
+	Package       SuiObjectRef      `json:"package"`
+	Module        string            `json:"module"`
+	Function      string            `json:"function"`
+	TypeArguments []string          `json:"typeArguments"`
+	Arguments     []json.RawMessage `json:"arguments"`
+}

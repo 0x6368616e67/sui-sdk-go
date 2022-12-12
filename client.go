@@ -145,9 +145,17 @@ func (c *Client) GetObjectsOwnedByObject(ctx context.Context, objectID types.Obj
 // GetRawObject return the raw BCS serialized move object bytes for a specified object
 func (c *Client) GetRawObject(ctx context.Context, objectID types.ObjectID) (object *types.SuiObjectData, err error) {
 	err = c.c.CallContext(ctx, &object, "sui_getRawObject", objectID)
-	if err != nil {
-		fmt.Printf("err:%s\n", err.Error())
-		err = ErrNumber
-	}
+	return
+}
+
+// GetTransaction return  the transaction response object
+func (c *Client) GetTransaction(ctx context.Context, transaction types.TransactionDigest) (response *types.SuiTransactionResponse, err error) {
+	err = c.c.CallContext(ctx, &response, "sui_getTransaction", transaction)
+	return
+}
+
+// GetTransactionAuthSigners return the authority public keys that commits to the authority signature of the transaction
+func (c *Client) GetTransactionAuthSigners(ctx context.Context, transaction types.TransactionDigest) (response *types.SuiTransactionAuthSignersResponse, err error) {
+	err = c.c.CallContext(ctx, &response, "sui_getTransactionAuthSigners", transaction)
 	return
 }

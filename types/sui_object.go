@@ -10,6 +10,21 @@ type SuiObjectRef struct {
 	Version  uint64            `json:"version"`
 }
 
+type SuiObject struct {
+	Data                SuiData           `json:"data"`
+	Owner               ObjectOwner       `json:"owner"`
+	PreviousTransaction TransactionDigest `json:"previousTransaction"`
+
+	StorageRebate int64        `json:"storageRebate"`
+	Reference     SuiObjectRef `json:"reference"`
+}
+
+type SuiPackage struct {
+	Digest   string `json:"digest"`
+	ObjectId string `json:"objectId"`
+	Version  int64  `json:"version"`
+}
+
 type SuiObjectInfo struct {
 	SuiObjectRef
 	Type                string            `json:"type"`
@@ -187,4 +202,15 @@ func (smnt *SuiObjectData) UnmarshalJSON(b []byte) (err error) {
 	}
 
 	return
+}
+
+type OwnedObjectRef struct {
+	Owner     ObjectOwner  `json:"owner"`
+	Reference SuiObjectRef `json:"reference"`
+}
+
+type GasCostSummary struct {
+	ComputationCost int64 `json:"computationCost"`
+	StorageCost     int64 `json:"storageCost"`
+	StorageRebate   int64 `json:"storageRebate"`
 }
