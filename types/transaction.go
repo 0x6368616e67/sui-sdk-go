@@ -16,7 +16,8 @@ type CommitteeInfo struct {
 }
 
 type TransactionBytes struct {
-	Bytes string `json:"txBytes"`
+	Bytes string       `json:"txBytes"`
+	Gas   SuiObjectRef `json:"gas"`
 }
 
 type TransferObject struct {

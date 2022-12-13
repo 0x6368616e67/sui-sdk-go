@@ -24,15 +24,15 @@ a sui sdk  of golang
 - [x] sui_getTransactionAuthSigners
 - [x] sui_getTransactions
 - [x] sui_getTransactionsInRange
-- [ ] sui_mergeCoins
-- [ ] sui_moveCall
-- [ ] sui_pay
-- [ ] sui_payAllSui
-- [ ] sui_paySui
-- [ ] sui_publish
-- [ ] sui_splitCoin
-- [ ] sui_splitCoinEqual
+- [x] sui_mergeCoins
+- [x] sui_moveCall
+- [x] sui_pay
+- [x] sui_payAllSui
+- [x] sui_paySui
+- [x] sui_publish
+- [x] sui_splitCoin
+- [x] sui_splitCoinEqual
 - [ ] sui_subscribeEvent
-- [ ] sui_transferObject
-- [ ] sui_transferSui
+- [x] sui_transferObject
+- [x] sui_transferSui
 - [ ] sui_tryGetPastObject

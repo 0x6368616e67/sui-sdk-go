@@ -180,3 +180,11 @@ func TestGetTransactionsInRange(t *testing.T) {
 	assert.Equal(t, err, nil)
 	fmt.Printf("tx:%+v \n", tx)
 }
+
+func TestMergeCoins(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	bytes, err := cli.MergeCoins(context.Background(), types.HexToAddress("0xd4cce533669ffa336547a6f33a904dcdc7834770"), types.ObjectID("0xe28444588014cd9a7c060bb0e9722628213ccaf4"), types.ObjectID("0x76a815d4033f9b6f6e48626e29b9386331eacf8a"), types.ObjectID("0x87bf662022eedca4aa213fe90565f221885a6865"), 100)
+	assert.Equal(t, err, nil)
+	fmt.Printf("bytes:%+v \n", bytes.Bytes)
+}

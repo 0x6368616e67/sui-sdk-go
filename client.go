@@ -2,6 +2,7 @@ package sui
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/0x6368616e67/sui-sdk-go/types"
@@ -39,16 +40,6 @@ func (c *Client) Close() {
 func (c *Client) GetEvents(ctx context.Context, query types.EventQuery, cursor *types.EventID, limit uint64, descending bool) (event *types.PaginatedEvents, err error) {
 	event = &types.PaginatedEvents{}
 	err = c.c.CallContext(ctx, event, "sui_getEvents", query, cursor, limit, descending)
-	if err != nil {
-		fmt.Printf("err:%s\n", err.Error())
-		err = ErrNumber
-	}
-	return
-}
-
-func (c *Client) PayAllSui(ctx context.Context, signer types.Address, coins []types.ObjectID, recipient types.Address, gasBudget uint64) (txBytes *types.TransactionBytes, err error) {
-	txBytes = &types.TransactionBytes{}
-	err = c.c.CallContext(ctx, txBytes, "sui_payAllSui", signer.String(), coins, recipient.String(), gasBudget)
 	if err != nil {
 		fmt.Printf("err:%s\n", err.Error())
 		err = ErrNumber
@@ -170,5 +161,75 @@ func (c *Client) GetTransactions(ctx context.Context, query types.TransactionQue
 func (c *Client) GetTransactionsInRange(ctx context.Context, start int64, end int64) (digests []types.TransactionDigest, err error) {
 	digests = make([]types.TransactionDigest, 1)
 	err = c.c.CallContext(ctx, &digests, "sui_getTransactionsInRange", start, end)
+	return
+}
+
+// MergeCoins create an unsigned transaction to merge multiple coins into one coin
+func (c *Client) MergeCoins(ctx context.Context, signer types.Address, primaryCoin types.ObjectID, coinToMerge types.ObjectID, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_mergeCoins", signer.String(), primaryCoin, coinToMerge, gas, gasBudget)
+	return
+}
+
+// MoveCall create an unsigned transaction to execute a Move call on the network, by calling the specified function in the module of a given package
+func (c *Client) MoveCall(ctx context.Context, signer types.Address, packageObjectID types.ObjectID, module string, function string, typeArgs []string, args []json.RawMessage, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_moveCall", signer.String(), packageObjectID, module, function, typeArgs, args, gas, gasBudget)
+	return
+}
+
+// Pay send Coin<T> to a list of addresses, where `T` can be any coin type, following a list of amounts, The object specified in the `gas` field will be used to pay the gas fee for the transaction. The gas object can not appear in `input_coins`. If the gas object is not specified, the RPC server will auto-select one
+func (c *Client) Pay(ctx context.Context, signer types.Address, inputCoins []string, recipients []string, amounts []int64, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_pay", signer.String(), inputCoins, recipients, amounts, gas, gasBudget)
+	return
+}
+
+// PayAllSui send all SUI coins to one recipient. This is for SUI coin only and does not require a separate gas coin object. Specifically,
+// what pay_all_sui does are:
+// 1. accumulate all SUI from input coins and deposit all SUI to the first input coin
+// 2. transfer the updated first coin to the recipient and also use this first coin as gas coin object.
+// 3. the balance of the first input coin after tx is sum(input_coins) - actual_gas_cost.
+// 4. all other input coins other than the first are deleted
+func (c *Client) PayAllSui(ctx context.Context, signer types.Address, coins []types.ObjectID, recipient types.Address, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_payAllSui", signer.String(), coins, recipient.String(), gasBudget)
+	return
+}
+
+// PaySui send SUI coins to a list of addresses, following a list of amounts.
+// This is for SUI coin only and does not require a separate gas coin object. Specifically, what pay_sui does are:
+// 1. debit each input_coin to create new coin following the order of amounts and assign it to the corresponding recipient.
+// 2. accumulate all residual SUI from input coins left and deposit all SUI to the first input coin, then use the first input coin as the gas coin object.
+// 3. the balance of the first input coin after tx is sum(input_coins) - sum(amounts) - actual_gas_cost
+// 4. all other input coints other than the first one are deleted.
+func (c *Client) PaySui(ctx context.Context, signer types.Address, inputCoins []string, recipients []string, amounts []int64, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_paySui", signer.String(), inputCoins, recipients, amounts, gasBudget)
+	return
+}
+
+// Publish create an unsigned transaction to publish Move module
+func (c *Client) Publish(ctx context.Context, signer types.Address, compiledModules []string, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_publish", signer.String(), compiledModules, gas, gasBudget)
+	return
+}
+
+// SplitCoin create an unsigned transaction to split a coin object into multiple coins
+func (c *Client) SplitCoin(ctx context.Context, signer types.Address, coin types.ObjectID, splitAmounts []int64, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_splitCoin", signer.String(), coin, splitAmounts, gas, gasBudget)
+	return
+}
+
+// SplitCoinEqual create an unsigned transaction to split a coin object into multiple equal-size coins
+func (c *Client) SplitCoinEqual(ctx context.Context, signer types.Address, coin types.ObjectID, splitCount int64, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_splitCoinEqual", signer.String(), coin, splitCount, gas, gasBudget)
+	return
+}
+
+// TransferObject create an unsigned transaction to transfer an object from one address to another. The object's type must allow public transfers
+func (c *Client) TransferObject(ctx context.Context, signer types.Address, objectID types.ObjectID, recipient types.Address, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_transferObject", signer.String(), objectID, gas, gasBudget, recipient.String())
+	return
+}
+
+// TransferSui create an unsigned transaction to send SUI coin object to a Sui address. The SUI object is also used as the gas object
+func (c *Client) TransferSui(ctx context.Context, signer types.Address, objectID types.ObjectID, recipient types.Address, amount int64, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+	err = c.c.CallContext(ctx, &bytes, "sui_transferSui", signer.String(), objectID, gasBudget, recipient.String(), amount)
 	return
 }
