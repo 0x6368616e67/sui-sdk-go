@@ -1,7 +1,7 @@
 package sui
 
 const (
-	Devnet  string = "https://fullnode.devnet.sui.io:443"
+	Devnet  string = "https://fullnode.devnet.sui.io"
 	Testnet string = "https://fullnode.testnet.sui.io:443"
 )
 

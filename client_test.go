@@ -164,3 +164,19 @@ func TestGetTransactionAuthSigners(t *testing.T) {
 	assert.Equal(t, err, nil)
 	fmt.Printf("signers:%+v \n", s)
 }
+
+func TestGetTransactions(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	tx, err := cli.GetTransactions(context.Background(), types.TransactionQuery{All: types.TransactionQueryAll}, types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"), 2, true)
+	assert.Equal(t, err, nil)
+	fmt.Printf("tx:%+v \n", tx)
+}
+
+func TestGetTransactionsInRange(t *testing.T) {
+	cli, err := Dial(Devnet)
+	assert.Equal(t, err, nil)
+	tx, err := cli.GetTransactionsInRange(context.Background(), 12298242, 12298267)
+	assert.Equal(t, err, nil)
+	fmt.Printf("tx:%+v \n", tx)
+}

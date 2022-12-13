@@ -159,3 +159,16 @@ func (c *Client) GetTransactionAuthSigners(ctx context.Context, transaction type
 	err = c.c.CallContext(ctx, &response, "sui_getTransactionAuthSigners", transaction)
 	return
 }
+
+// GetTransactions return list of transactions for a specified query criteria
+func (c *Client) GetTransactions(ctx context.Context, query types.TransactionQuery, cursor types.TransactionDigest, limit int64, descending bool) (digests *types.PaginatedTransactionDigests, err error) {
+	err = c.c.CallContext(ctx, &digests, "sui_getTransactions", query, cursor, limit, descending)
+	return
+}
+
+// GetTransactionsInRange return  list of transaction digests within the queried range
+func (c *Client) GetTransactionsInRange(ctx context.Context, start int64, end int64) (digests []types.TransactionDigest, err error) {
+	digests = make([]types.TransactionDigest, 1)
+	err = c.c.CallContext(ctx, &digests, "sui_getTransactionsInRange", start, end)
+	return
+}

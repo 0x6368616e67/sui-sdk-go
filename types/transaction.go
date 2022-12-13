@@ -165,3 +165,40 @@ type SuiTransactionResponse struct {
 type SuiTransactionAuthSignersResponse struct {
 	Signers []string `json:"signers"`
 }
+
+type TransactionQueryALL string
+
+const (
+	TransactionQueryAll = TransactionQueryALL("All")
+)
+
+func (tq TransactionQueryALL) TransactionQueryer() {
+
+}
+
+type TransactionQueryMoveFunction struct {
+	Package  ObjectID `json:"Package"`
+	Module   *string  `json:"module"`
+	Function *string  `json:"function"`
+}
+
+type TransactionQuery struct {
+	All           TransactionQueryALL
+	MoveFunction  *TransactionQueryMoveFunction `json:"MoveFunction"`
+	InputObject   *ObjectID                     `json:"InputObject"`
+	MutatedObject *ObjectID                     `json:"MutatedObject"`
+	FromAddress   *string                       `json:"FromAddress"`
+	ToAddress     *string                       `json:"ToAddress"`
+}
+
+func (tq TransactionQuery) MarshalJSON() ([]byte, error) {
+	if tq.All == TransactionQueryAll {
+		return []byte(`"All"`), nil
+	}
+	return json.Marshal(tq)
+}
+
+type PaginatedTransactionDigests struct {
+	Data       []TransactionDigest `json:"data"`
+	NextCursor *TransactionDigest  `json:"nextCursor,omitempty"`
+}

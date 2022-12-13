@@ -22,8 +22,8 @@ a sui sdk  of golang
 - [x] sui_getTotalTransactionNumber
 - [x] sui_getTransaction
 - [x] sui_getTransactionAuthSigners
-- [ ] sui_getTransactions
-- [ ] sui_getTransactionsInRange
+- [x] sui_getTransactions
+- [x] sui_getTransactionsInRange
 - [ ] sui_mergeCoins
 - [ ] sui_moveCall
 - [ ] sui_pay
