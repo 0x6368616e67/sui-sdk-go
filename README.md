@@ -1,5 +1,10 @@
 # sui-sdk-go
-a sui sdk  of golang
+
+[![Go Build status](https://github.com/0x6368616e67/sui-sdk-go/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/0x6368616e67/sui-sdk-go/actions/workflows/build.yml)[![Test status](https://github.com/0x6368616e67/sui-sdk-go/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/0x6368616e67/sui-sdk-go/actions/workflows/ci.yml) [![SDK Documentation](https://img.shields.io/badge/SDK-Documentation-blue)](https://pkg.go.dev/github.com/0x6368616e67/sui-sdk-go) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/0x6368616e67/sui-sdk-go/blob/main/LICENSE)
+
+`sui-sdk-go` is a golang sdk for [Sui](https://sui.io/). Which contains 
+all [RPC API](https://docs.sui.io/sui-jsonrpc) with `Client` and some operation 
+for `Account` object such as `Transfer`, `Balance` etc...
 
 ## Support RPC Status
 
