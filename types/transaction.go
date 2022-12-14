@@ -125,7 +125,8 @@ type TransactionEffects struct {
 }
 
 type SuiCertifiedTransactionEffects struct {
-	Effects TransactionEffects `json:"effects"`
+	Certificate CertifiedTransaction `json:"certificate"`
+	Effects     TransactionEffects   `json:"effects"`
 }
 
 type SuiParsedSplitCoinResponse struct {

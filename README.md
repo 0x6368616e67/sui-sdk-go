@@ -10,8 +10,8 @@ for `Account` object such as `Transfer`, `Balance` etc...
 
 - [ ] sui_batchTransaction
 - [ ] sui_dryRunTransaction
-- [ ] sui_executeTransaction
-- [ ] sui_executeTransactionSerializedSig
+- [x] sui_executeTransaction
+- [x] sui_executeTransactionSerializedSig
 - [x] sui_getCoinMetadata
 - [x] sui_getCommitteeInfo
 - [ ] sui_getEvents
