@@ -21,15 +21,15 @@ import (
 // 	fmt.Printf("data:%+v \n", events.Data[0].Event.CoinBalanceChangeEvent)
 // }
 
-func TestGetObjectsOwnedByAddress(t *testing.T) {
-	cli, err := Dial(Devnet)
-	assert.Equal(t, err, nil)
-	address := types.HexToAddress("0xc4173a804406a365e69dfb297d4eaaf002546ebd")
-	objects, err := cli.GetObjectsOwnedByAddress(context.Background(), address)
-	assert.Equal(t, err, nil)
-	fmt.Printf("objects:%+v \n", objects)
-	fmt.Printf("objects count:%d \n", len(objects))
-}
+// func TestGetObjectsOwnedByAddress(t *testing.T) {
+// 	cli, err := Dial(Devnet)
+// 	assert.Equal(t, err, nil)
+// 	address := types.HexToAddress("0xc4173a804406a365e69dfb297d4eaaf002546ebd")
+// 	objects, err := cli.GetObjectsOwnedByAddress(context.Background(), address)
+// 	assert.Equal(t, err, nil)
+// 	fmt.Printf("objects:%+v \n", objects)
+// 	fmt.Printf("objects count:%d \n", len(objects))
+// }
 
 // func TestPayAllSui(t *testing.T) {
 // 	cli, err := Dial(Testnet)
