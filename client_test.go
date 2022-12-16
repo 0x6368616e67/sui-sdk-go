@@ -56,13 +56,13 @@ func TestGetCoinMetadata(t *testing.T) {
 	fmt.Printf("metadata:%+v \n", metadata)
 }
 
-func TestGetCommitteeInfo(t *testing.T) {
-	cli, err := Dial(Devnet)
-	assert.Equal(t, err, nil)
-	info, err := cli.GetCommitteeInfo(context.Background(), nil)
-	assert.Equal(t, err, nil)
-	fmt.Printf("info:%+v \n", info)
-}
+// func TestGetCommitteeInfo(t *testing.T) {
+// 	cli, err := Dial(Devnet)
+// 	assert.Equal(t, err, nil)
+// 	info, err := cli.GetCommitteeInfo(context.Background(), nil)
+// 	assert.Equal(t, err, nil)
+// 	fmt.Printf("info:%+v \n", info)
+// }
 
 func TestGetTotalTransactionNumber(t *testing.T) {
 	cli, err := Dial(Devnet)
