@@ -1,11 +1,13 @@
 package sui
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/0x6368616e67/sui-sdk-go/types"
@@ -68,12 +70,13 @@ func (acc *Account) Balance(client *Client) (balance float64, err error) {
 		if sobj, ok := obj.Details.(types.SuiObejct); ok {
 			if sobj.Data.Type == "0x2::coin::Coin<0x2::sui::SUI>" {
 				if rj, ok := sobj.Data.Fields["balance"]; ok {
-					var b int64
+					var b string
 					err = json.Unmarshal(rj, &b)
 					if err != nil {
 						return 0, err
 					}
-					balance += float64(b) / (1000000000)
+					bb, _ := strconv.ParseUint(b, 10, 64)
+					balance += float64(bb) / (1000000000)
 				}
 			}
 		}
@@ -88,7 +91,7 @@ func (acc *Account) Transfer(client *Client, recipient types.Address, amount flo
 		return
 	}
 	aamount := 0.0
-	var coins []string
+	var coins []types.ObjectID
 	for _, o := range objs {
 		obj, err := client.GetObject(context.TODO(), o.ObjectID)
 		if err != nil {
@@ -97,20 +100,24 @@ func (acc *Account) Transfer(client *Client, recipient types.Address, amount flo
 		if sobj, ok := obj.Details.(types.SuiObejct); ok {
 			if sobj.Data.Type == "0x2::coin::Coin<0x2::sui::SUI>" {
 				if rj, ok := sobj.Data.Fields["balance"]; ok {
-					type Balance struct {
-						Balance int `json:"balance"`
-						ID      struct {
-							ID string `json:"id"`
-						} `json:"id"`
-					}
-
-					var b Balance
+					var b string
 					err = json.Unmarshal(rj, &b)
 					if err != nil {
 						return "", err
 					}
-					aamount += float64(b.Balance) / (1000000000)
-					coins = append(coins, b.ID.ID)
+					bb, _ := strconv.ParseUint(b, 10, 64)
+					aamount += float64(bb) / (1000000000)
+
+					type FieldID struct {
+						ID string `json:"id"`
+					}
+					var fid FieldID
+					err = json.Unmarshal(sobj.Data.Fields["id"], &fid)
+					if err != nil {
+						return "", err
+					}
+
+					coins = append(coins, types.ObjectID(fid.ID))
 				}
 			}
 		}
@@ -118,7 +125,10 @@ func (acc *Account) Transfer(client *Client, recipient types.Address, amount flo
 			break
 		}
 	}
-	txBytes, err := client.PaySui(context.TODO(), acc.Address(), coins, []string{recipient.String()}, []int64{int64(amount)}, 2000)
+	ramount := int64(amount * 1000000000)
+	fmt.Printf("ramount:%d\n", ramount)
+	txBytes, err := client.PaySui(context.TODO(), acc.Address(), coins, []string{recipient.String()}, []int64{ramount}, 2000)
+	//txBytes, err := client.PayAllSui(context.TODO(), acc.Address(), coins, recipient, 2000)
 	if err != nil {
 		return
 	}
@@ -127,16 +137,25 @@ func (acc *Account) Transfer(client *Client, recipient types.Address, amount flo
 		fmt.Printf("DecodeString error:%s", err.Error())
 		return
 	}
-	sig, err := acc.Sign(tx)
+	var sigData bytes.Buffer
+	sigData.Write([]byte{0, 0, 0})
+	sigData.Write(tx)
+	sig, err := acc.Sign(sigData.Bytes())
 	if err != nil {
 		fmt.Printf("Sign error:%s", err.Error())
 		return
 	}
-	sigStr := base64.StdEncoding.EncodeToString(sig)
-	rsp, err := client.ExecuteTransaction(context.TODO(), txBytes.Bytes, ED25519, sigStr, acc.privateKey.PubKey(), WaitForTxCert)
+	var buf bytes.Buffer
+	buf.Write([]byte{0x00})
+	buf.Write(sig)
+	buf.Write(acc.privateKey.PubKey().Bytes())
+	sigStr := base64.StdEncoding.EncodeToString(buf.Bytes())
+
+	rsp, err := client.ExecuteTransactionSerializedSig(context.TODO(), txBytes.Bytes, sigStr, WaitForEffectsCert)
 	if err != nil {
 		return
 	}
-	hash = string(*rsp.TxDigest)
+	fmt.Printf("rsp:%+v \n", rsp)
+	//hash = string(*rsp.TxDigest)
 	return
 }

@@ -141,37 +141,37 @@ func TestGetObjectsOwnedByObject(t *testing.T) {
 	fmt.Printf("objects count:%d \n", len(objects))
 }
 
-func TestGetRawObject(t *testing.T) {
-	cli, err := Dial(Devnet)
-	assert.Equal(t, err, nil)
-	obj, err := cli.GetRawObject(context.Background(), types.ObjectID("0x35ec8a32a1d6ca884ba8ffb6dbcfda222533661e"))
-	assert.Equal(t, err, nil)
-	fmt.Printf("obj:%+v \n", obj)
-}
+// func TestGetRawObject(t *testing.T) {
+// 	cli, err := Dial(Devnet)
+// 	assert.Equal(t, err, nil)
+// 	obj, err := cli.GetRawObject(context.Background(), types.ObjectID("0x35ec8a32a1d6ca884ba8ffb6dbcfda222533661e"))
+// 	assert.Equal(t, err, nil)
+// 	fmt.Printf("obj:%+v \n", obj)
+// }
 
-func TestGetTransaction(t *testing.T) {
-	cli, err := Dial(Devnet)
-	assert.Equal(t, err, nil)
-	tx, err := cli.GetTransaction(context.Background(), types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"))
-	assert.Equal(t, err, nil)
-	fmt.Printf("tx:%+v \n", tx)
-}
+// func TestGetTransaction(t *testing.T) {
+// 	cli, err := Dial(Devnet)
+// 	assert.Equal(t, err, nil)
+// 	tx, err := cli.GetTransaction(context.Background(), types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"))
+// 	assert.Equal(t, err, nil)
+// 	fmt.Printf("tx:%+v \n", tx)
+// }
 
-func TestGetTransactionAuthSigners(t *testing.T) {
-	cli, err := Dial(Devnet)
-	assert.Equal(t, err, nil)
-	s, err := cli.GetTransactionAuthSigners(context.Background(), types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"))
-	assert.Equal(t, err, nil)
-	fmt.Printf("signers:%+v \n", s)
-}
+// func TestGetTransactionAuthSigners(t *testing.T) {
+// 	cli, err := Dial(Devnet)
+// 	assert.Equal(t, err, nil)
+// 	s, err := cli.GetTransactionAuthSigners(context.Background(), types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"))
+// 	assert.Equal(t, err, nil)
+// 	fmt.Printf("signers:%+v \n", s)
+// }
 
-func TestGetTransactions(t *testing.T) {
-	cli, err := Dial(Devnet)
-	assert.Equal(t, err, nil)
-	tx, err := cli.GetTransactions(context.Background(), types.TransactionQuery{All: types.TransactionQueryAll}, types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"), 2, true)
-	assert.Equal(t, err, nil)
-	fmt.Printf("tx:%+v \n", tx)
-}
+// func TestGetTransactions(t *testing.T) {
+// 	cli, err := Dial(Devnet)
+// 	assert.Equal(t, err, nil)
+// 	tx, err := cli.GetTransactions(context.Background(), types.TransactionQuery{All: types.TransactionQueryAll}, types.TransactionDigest("EwUHxDSiJeKKbzvhfQgdLcehhNRJSUKLYKzqaVCw9Ltf"), 2, true)
+// 	assert.Equal(t, err, nil)
+// 	fmt.Printf("tx:%+v \n", tx)
+// }
 
 func TestGetTransactionsInRange(t *testing.T) {
 	cli, err := Dial(Devnet)
@@ -181,10 +181,10 @@ func TestGetTransactionsInRange(t *testing.T) {
 	fmt.Printf("tx:%+v \n", tx)
 }
 
-func TestMergeCoins(t *testing.T) {
-	cli, err := Dial(Devnet)
-	assert.Equal(t, err, nil)
-	bytes, err := cli.MergeCoins(context.Background(), types.HexToAddress("0xd4cce533669ffa336547a6f33a904dcdc7834770"), types.ObjectID("0xe28444588014cd9a7c060bb0e9722628213ccaf4"), types.ObjectID("0x76a815d4033f9b6f6e48626e29b9386331eacf8a"), types.ObjectID("0x87bf662022eedca4aa213fe90565f221885a6865"), 100)
-	assert.Equal(t, err, nil)
-	fmt.Printf("bytes:%+v \n", bytes.Bytes)
-}
+// func TestMergeCoins(t *testing.T) {
+// 	cli, err := Dial(Devnet)
+// 	assert.Equal(t, err, nil)
+// 	bytes, err := cli.MergeCoins(context.Background(), types.HexToAddress("0xd4cce533669ffa336547a6f33a904dcdc7834770"), types.ObjectID("0xe28444588014cd9a7c060bb0e9722628213ccaf4"), types.ObjectID("0x76a815d4033f9b6f6e48626e29b9386331eacf8a"), types.ObjectID("0x87bf662022eedca4aa213fe90565f221885a6865"), 100)
+// 	assert.Equal(t, err, nil)
+// 	fmt.Printf("bytes:%+v \n", bytes.Bytes)
+// }

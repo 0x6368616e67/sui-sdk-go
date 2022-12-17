@@ -60,8 +60,7 @@ func (c *Client) GetEvents(ctx context.Context, query types.EventQuery, cursor *
 func (c *Client) ExecuteTransaction(ctx context.Context, txBytes string, signatureScheme SignatureScheme, signature string, pubkey types.PubKey, requestType ExecuteTransactionRequestType) (response types.SuiExecuteTransactionResponse, err error) {
 	err = c.c.CallContext(ctx, &response, "sui_executeTransaction", txBytes, signatureScheme, signature, pubkey.Base64(), requestType)
 	if err != nil {
-		fmt.Printf("err:%s\n", err.Error())
-		err = ErrNumber
+		err = fmt.Errorf("ExecuteTransaction-%s", err.Error())
 	}
 	return
 }
@@ -193,7 +192,7 @@ func (c *Client) MoveCall(ctx context.Context, signer types.Address, packageObje
 }
 
 // Pay send Coin<T> to a list of addresses, where `T` can be any coin type, following a list of amounts, The object specified in the `gas` field will be used to pay the gas fee for the transaction. The gas object can not appear in `input_coins`. If the gas object is not specified, the RPC server will auto-select one
-func (c *Client) Pay(ctx context.Context, signer types.Address, inputCoins []string, recipients []string, amounts []int64, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+func (c *Client) Pay(ctx context.Context, signer types.Address, inputCoins []types.ObjectID, recipients []string, amounts []int64, gas types.ObjectID, gasBudget uint64) (bytes types.TransactionBytes, err error) {
 	err = c.c.CallContext(ctx, &bytes, "sui_pay", signer.String(), inputCoins, recipients, amounts, gas, gasBudget)
 	return
 }
@@ -215,7 +214,7 @@ func (c *Client) PayAllSui(ctx context.Context, signer types.Address, coins []ty
 // 2. accumulate all residual SUI from input coins left and deposit all SUI to the first input coin, then use the first input coin as the gas coin object.
 // 3. the balance of the first input coin after tx is sum(input_coins) - sum(amounts) - actual_gas_cost
 // 4. all other input coints other than the first one are deleted.
-func (c *Client) PaySui(ctx context.Context, signer types.Address, inputCoins []string, recipients []string, amounts []int64, gasBudget uint64) (bytes types.TransactionBytes, err error) {
+func (c *Client) PaySui(ctx context.Context, signer types.Address, inputCoins []types.ObjectID, recipients []string, amounts []int64, gasBudget uint64) (bytes types.TransactionBytes, err error) {
 	err = c.c.CallContext(ctx, &bytes, "sui_paySui", signer.String(), inputCoins, recipients, amounts, gasBudget)
 	return
 }
